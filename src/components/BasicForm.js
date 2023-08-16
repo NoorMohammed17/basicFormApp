@@ -10,10 +10,36 @@ const BasicForm = (props) => {
     reset: resetNameInput,
   } = useInput((value) => value.trim() !== "");
 
+
+  let formIsValid = false;
+
+  if (enteredNameIsValid ) {
+    formIsValid = true;
+  }
+
+  const formSubmissionHandler = (event) => {
+    event.preventDefault();
+
+    if (!enteredNameIsValid) {
+      return;
+    }
+
+    console.log(enteredName);
+
+  
+    resetNameInput();
+
+    
+  };
+
+  const nameInputClasses = nameInputHasError
+  ? 'form-control invalid'
+  : 'form-control';
+
   return (
-    <form>
+    <form onSubmit={formSubmissionHandler}>
       <div className="control-group">
-        <div className="form-control">
+        <div className={nameInputClasses}>
           <label htmlFor="name">First Name</label>
           <input
             type="text"
@@ -22,6 +48,9 @@ const BasicForm = (props) => {
             onChange={nameChangeHandler}
             onBlur={nameBlurHandler}
           />
+           {nameInputHasError && (
+          <p className='error-text'>Name must not be empty.</p>
+        )}
         </div>
         <div className="form-control">
           <label htmlFor="name">Last Name</label>
@@ -33,7 +62,7 @@ const BasicForm = (props) => {
         <input type="text" id="name" />
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
     </form>
   );
